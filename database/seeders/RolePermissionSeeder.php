@@ -10,17 +10,16 @@ use Spatie\Permission\Models\Permission;
 class RolePermissionSeeder extends Seeder
 {
     public function run()
-    {
-        // Création des rôles
-        $roleAdmin = Role::create(['name' => 'admin']);
-        // ... autres rôles ...
+ {
+   
+$roles = ['admin', 'editor', 'user'];
+foreach ($roles as $roleName) {
+    Role::create(['name' => $roleName]);
+}
 
-        // Création des permissions
-        $permEditArticles = Permission::create(['name' => 'edit articles']);
-        // ... autres permissions ...
-
-        // Assigner les permissions au rôle
-        $roleAdmin->givePermissionTo($permEditArticles);
-        // ... autres assignations ...
+$permissions = ['edit articles', 'delete articles', 'view articles','create articles'];
+foreach ($permissions as $permissionName) {
+    Permission::create(['name' => $permissionName]);
+}
     }
 }
