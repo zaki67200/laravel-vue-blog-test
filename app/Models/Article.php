@@ -16,7 +16,7 @@ class Article extends Model
      *
      * @var array<string>
      */
-    protected $fillable = ['titre', 'contenu', 'categorie', 'image', 'user_id','is_published'];
+    protected $fillable = ['titre', 'contenu', 'categorie', 'image','imageUrl', 'user_id','is_published'];
 
     /**
      * Les attributs qui doivent être convertis en types natifs.
@@ -29,7 +29,12 @@ class Article extends Model
         // 'published_at' => 'datetime',
     ];
 
- 
+    public function getImageUrlAttribute()
+    {
+        return $this->image ? asset('storage/' . $this->image) : null;
+    }
+
+
   
     public function user()
     {

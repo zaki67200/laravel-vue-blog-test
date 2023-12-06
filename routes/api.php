@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\UserController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -18,8 +19,10 @@ use App\Http\Controllers\ArticleController;
 //     return $request->user();
 // });
 
-
+Route::get('/users', [UserController::class, 'index']);
 
 Route::get('/articles', [ArticleController::class, 'index'])->name('articles.index');
 // Route pour un article spécifique
-Route::get('article/{article}', [ArticleController::class, 'show'])->name('articles.show');
+Route::get('article/{id}', [ArticleController::class, 'show'])->name('articles.show');
+Route::get('/article/edit/{id}', [ArticleController::class, 'edit']);
+Route::post('/article/update/{id}', [ArticleController::class, 'update']);

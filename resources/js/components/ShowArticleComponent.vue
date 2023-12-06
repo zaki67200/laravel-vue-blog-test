@@ -11,11 +11,16 @@
 
       <div class="w-full px-6 py-4 bg-white rounded shadow-md ring-1 ring-gray-900/10">
         <form method="POST" action="#">
-          <!-- Title -->
-          <div>
+          
+      <div>
+        <div v-if="article" class="mt-4 border p-3 rounded shadow">
+    <img :src="article.imageUrl || article.image" 
+         :alt="article.imageUrl ? 'Image actuelle de l\'article' : 'Image par défaut de l\'article'" 
+         class="max-w-full h-auto"/>
+
+      </div>
 	     <!-- Section Image -->
-       	    <img class="w-full" :src="article.image" :alt="article.titre">	
-            <h3 class="text-2xl font-semibold">{{ article.titre }}</h3>
+         <h3 class="text-2xl font-semibold">{{ article.titre }}</h3>
             <div class="flex items-center mb-4 space-x-2">
               <span class="text-xs text-gray-500">{{ article.created_at }}</span>
               <span class="text-xs text-gray-500">{{ article.user ? article.user.name : 'Auteur inconnu' }}</span>
@@ -64,6 +69,7 @@ mounted() {
     axios.get(`http://localhost:8000/api/article/${this.articleId}`)
       .then(response => {
         this.article = response.data;
+        
       })
       .catch(error => {
         console.error("Erreur lors de la récupération de l'article: ", error);
