@@ -7,7 +7,8 @@
 
 import { createApp } from 'vue';
 import './bootstrap';
-import ExampleComponent from './components/ExampleComponent.vue';
+import ListeArticlesComponent from './components/ListeArticlesComponent.vue';
+
 /**
  * Next, we will create a fresh Vue application instance. You may then begin
  * registering components with the application instance so they are ready
@@ -16,7 +17,7 @@ import ExampleComponent from './components/ExampleComponent.vue';
 
 const app = createApp({});
 
-app.component('example-component', ExampleComponent);
+app.component('liste-articles', ListeArticlesComponent);
 
 /**
  * The following block of code may be used to automatically register your
