@@ -21,3 +21,5 @@ use App\Http\Controllers\ArticleController;
 
 
 Route::get('/articles', [ArticleController::class, 'index'])->name('articles.index');
+// Route pour un article spécifique
+Route::get('article/{article}', [ArticleController::class, 'show'])->name('articles.show');
