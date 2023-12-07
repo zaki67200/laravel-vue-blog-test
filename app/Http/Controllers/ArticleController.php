@@ -43,27 +43,30 @@ public function edit($id)
     return response()->json($article);
 }
 
+public function updateUserArticle(Request $request, $articleId) {
+    $article = Article::find($articleId);
+    // ... Logique de mise à jour de l'article
+    return response()->json(['message' => 'Article updated successfully']);
+}
+
 
 public function update(Request $request, $id)
 {
     $article = Article::findOrFail($id);
 
     if ($request->hasFile('image')) {
-        // Suppression de l'ancienne image si elle existe
-        if ($article->image) {
-            Storage::delete($article->image);
-            $article->image = null; // Supprimez l'ancien lien
+        // Suppression de l'ancienne image
+        if ($article->imageUrl) {
+            $oldFilename = basename($article->imageUrl);
+            Storage::delete('public/images/' . $oldFilename);
         }
 
         // Stockage de la nouvelle image
         $filename = $request->image->store('images', 'public');
-
-        // Mise à jour de imageUrl avec le chemin du fichier
-        $article->imageUrl = $filename;
+        $article->imageUrl = Storage::url($filename);
     }
 
-    // Mise à jour de l'article avec les nouvelles données
-    // Exclure 'image' si vous ne voulez plus l'utiliser
+    // Mise à jour des autres champs
     $article->update($request->except(['image']));
 
     return response()->json($article);

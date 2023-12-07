@@ -26,9 +26,11 @@
             <img :src="article.imageUrl || article.image" 
                  :alt="article.imageUrl ? 'Image actuelle de l\'article' : 'Image par défaut de l\'article'" 
                  class="max-w-full h-auto"/>
-            </div>
-            <div class="mt-4">
+
+                 <div class="mt-4">
               <input type="file" @change="onFileChange" class="block w-full mt-1 border-gray-100 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 bg-white">
+            </div>
+            
             </div>
             
     
@@ -45,7 +47,7 @@
             <button id="publishButton" @click="togglePublish" :class="{'bg-blue-500': !article.is_published, 'bg-green-500': article.is_published}" class="text-white px-4 py-2 rounded hover:bg-blue-700">{{ article.is_published ? 'Publié' : 'Non publié' }}</button>
   
             <div class="flex items-center justify-start mt-4 gap-x-2">
-              <button type="submit" class="px-6 py-2 text-sm font-semibold rounded-md shadow-md text-sky-100 bg-sky-500 hover:bg-sky-700">Update</button>
+              <button type="submit" @click="updateArticle" class="px-6 py-2 text-sm font-semibold rounded-md shadow-md text-sky-100 bg-sky-500 hover:bg-sky-700">Update</button>
               <button type="button" @click="cancelUpdate" class="px-6 py-2 text-sm font-semibold text-gray-100 bg-gray-400 rounded-md shadow-md hover:bg-gray-600">Cancel</button>
             </div>
           </form>
@@ -73,6 +75,7 @@
            article: {},
            articleId: null,
            image: null,
+           imageChanged:null,
          };
        },
        watch: {
@@ -87,6 +90,44 @@
          await this.fetchData();
        },
        methods: {
+        async updateArticle() {
+    try {
+        const formData = new FormData();
+        // Gestion conditionnelle de l'image
+        if (this.image && this.imageChanged) {  // Utilisez 'imageChanged' pour détecter les changements
+            formData.append('image', this.image);
+        }
+
+        // Ajout des propriétés de l'article au formData, sauf 'image'
+        Object.keys(this.article).forEach(key => {
+            if (key !== 'image') {
+                formData.append(key, this.article[key]);
+            }
+        });
+
+        // Ajout de 'user_id' si nécessaire
+        if (this.selectedUserId) {
+            formData.append('user_id', this.selectedUserId);
+        }
+
+        // Requête PUT pour la mise à jour de l'article
+        const response = await axios.put(
+            `${API_BASE_URL}/article/update/${this.articleId}`,
+            formData,
+            {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            }
+        );
+
+        console.log('Article mis à jour avec succès', response.data);
+        // Gérez ici la réponse, comme la redirection ou la mise à jour de l'interface utilisateur
+    } catch (error) {
+        console.error("Erreur lors de la mise à jour de l'article: ", error);
+        // Gestion des erreurs plus détaillée si nécessaire
+    }
+},
          async fetchData() {
            try {
              this.users = await this.fetchUsers();
@@ -112,7 +153,7 @@
          },
      
          togglePublish() {
-           this.article.is_published = !this.article.is_published;
+          this.article.is_published = !this.article.is_published;
          },
      
          updateArticleAuthor(userId) {
@@ -122,41 +163,13 @@
      
          onFileChange(e) {
            this.image = e.target.files[0];
-         },
+           this.imageChanged = true;  
+},
      
          cancelUpdate() {
            this.article = { titre: '', contenu: '', categorie: '', image: null };
          },
-         async updateArticle() {
-  try {
-    const formData = new FormData();
-    if (this.image) {
-      formData.append('image', this.image);
-    }
 
-    // Ajout des données de l'article dans formData
-    Object.keys(this.article).forEach(key => {
-      // Vous pouvez exclure la clé 'image' si elle n'est pas nécessaire dans la mise à jour
-      if (key !== 'image') {
-        formData.append(key, this.article[key]);
-      }
-    });
-
-    // Inclure l'ID de l'utilisateur sélectionné dans la requête
-    formData.append('user_id', this.selectedUserId);
-
-    const response = await axios.post(`${API_BASE_URL}/article/update/${this.articleId}`, formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      }
-    });
-
-    // Gérer la réponse ici, par exemple en redirigeant l'utilisateur ou en affichant un message de succès
-    console.log('Article mis à jour avec succès', response.data);
-  } catch (error) {
-    console.error("Erreur lors de la mise à jour de l'article: ", error);
-  }
-}
        }
      };
      </script>

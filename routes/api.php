@@ -25,4 +25,5 @@ Route::get('/articles', [ArticleController::class, 'index'])->name('articles.ind
 // Route pour un article spécifique
 Route::get('article/{id}', [ArticleController::class, 'show'])->name('articles.show');
 Route::get('/article/edit/{id}', [ArticleController::class, 'edit']);
-Route::post('/article/update/{id}', [ArticleController::class, 'update']);
+Route::put('/article/update/{id}', [ArticleController::class, 'update']);
+Route::patch('/article/update/{id}', [ArticleController::class, 'updateUserArticle']);

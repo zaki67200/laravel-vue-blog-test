@@ -30,7 +30,7 @@ Route::get('/article/{id}', [ArticleController::class, 'ShowArticle'])->name('ar
 Route::get('/article/edit/{id}', [ArticleController::class, 'ShowEditArticle'])->name('articles.edit-article');
 
 // Route pour la mise à jour de l'article
-Route::post('/article/update/{id}', [ArticleController::class, 'update'])->name('articles.edit-article');
+//Route::put('/article/update/{id}', [ArticleController::class, 'update'])->name('articles.edit-article');
 // Route::middleware(['role:admin'])->group(function () {
 //     Route::get('/admin/dashboard', [AdminController::class, 'dashboard']);
 //     // Autres routes réservées à l'administrateur
