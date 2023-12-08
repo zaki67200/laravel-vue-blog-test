@@ -15,13 +15,7 @@ use App\Http\Controllers\UserController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
 
-Auth::routes();
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::get('/articles', [ArticleController::class, 'ShowListArticles'])->name('articles.liste-articles');
 Route::get('/article/{id}', [ArticleController::class, 'ShowArticle'])->name('articles.show-article');
